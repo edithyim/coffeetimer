@@ -28,8 +28,8 @@ button, i {
 
 <h1>Coffee Timer (4:6 Method)</h1>
 
-<button onclick="StartTimer()" >PLAY</button> 
-<button onclick="PauseTimer()" >PAUSE</button>
+<button id="playBtt" onclick="StartTimer()" >PLAY</button> 
+<button id="pauseBtt" onclick="PauseTimer()" >PAUSE</button>
 <p/>
 
 <div id="showClock" align="left"> 00:00 </div> 
@@ -142,9 +142,8 @@ Remarks: <br/>
 <script> 
 
 var totalSeconds=0;
-var my_int = setInterval(function() { setTime()}, 1000);
+var my_int = setInterval(function() {setTime()}, 1000);
 clearInterval(my_int);
-  
 
 function loadFormValue() {
 
@@ -156,6 +155,9 @@ function loadFormValue() {
 	let sdId =  x.sdId.value;
 	
 	var sd =document.getElementById("audio");
+	if (sdId>4) {
+		sdId=4
+	}	
 	sd.src="sound"+sdId+".wav";
 	
 	let formData = new FormData(x);
@@ -394,17 +396,23 @@ function ResetTimer(){
 	prevSection=1
 	clearInterval(my_int); 
 	DisplayClock(totalSeconds)
+	document.getElementById("playBtt").disabled = false;
+	document.getElementById("pauseBtt").disabled = true;	
 }
 
 function StartTimer()
 { 
 	playAudio() 
-	my_int = setInterval(function() {setTime()}, 1000); 
+	my_int = setInterval(function() {setTime()}, 1000);
+	document.getElementById("playBtt").disabled = true;
+	document.getElementById("pauseBtt").disabled = false;
 }
 
 function PauseTimer()
 { 
-	clearInterval(my_int); 
+	clearInterval(my_int);
+	document.getElementById("playBtt").disabled = false;
+	document.getElementById("pauseBtt").disabled = true;	
 }
 
 //version:1.0
