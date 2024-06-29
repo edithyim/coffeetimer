@@ -53,14 +53,12 @@ button, i {
 </table> 
 
 <p/>
-
-<button onclick="ResetTimer()">Reset</button>
-
+ 
 
 <form name="myForm" action="" method="GET" onClick="loadFormValue(this.form)" >
 
  
-  <input type="button" name="button" value="GetFormula" onClick="loadFormValue(this.form)" />
+  <input type="button" name="button" value="Reset" onClick="loadFormValue(this.form)" />
   <p/>
   <p/>
   <table>
@@ -125,7 +123,7 @@ Remarks: <br/>
 1) Weight : Coffee Weight  <br/>
 2) Ratio  : Coffee : Total Weight <br/>
 3) Sweetness: adjust the potion of water in 1st section (less water, sweeter) <br/>
-4) Strenght : adjust no of section for later 6/10 (more, stronger coffee) <br/>
+4) Strength : adjust no of section for later 6/10 (more, stronger coffee) <br/>
 </p>
 
 <script>
@@ -148,19 +146,25 @@ function defaultValue() {
 }
 
 function loadFormValue(form) {
-  let weight = form.weight.value;
-  let ratio = form.ratio.value;
-  let sweetness = form.sweetness.value;
-  let coffee =  form.coffee.value;
-  
-  let formData = new FormData(form);
-  let settingObj = {};
-  formData.forEach(function(value, key){
-    settingObj[key] = value;
-  });
 
-  GetFormula(settingObj)
-  ResetTimer()
+	totalSeconds=0
+	prevSection=1
+	clearInterval(my_int); 
+	DisplayClock(totalSeconds)
+	
+	let weight = form.weight.value;
+	let ratio = form.ratio.value;
+	let sweetness = form.sweetness.value;
+	let coffee =  form.coffee.value;
+
+	let formData = new FormData(form);
+	let settingObj = {};
+	formData.forEach(function(value, key){
+		settingObj[key] = value;
+	});
+
+	GetFormula(settingObj)
+	ResetTimer()
 }
 
 function GetFormula(settingObj){  
@@ -382,15 +386,7 @@ function setTime() {
 		
 	} 
 }
- 
-function ResetTimer()
-{
-	totalSeconds=0
-	prevSection=1
-	clearInterval(my_int); 
-	DisplayClock(totalSeconds)
-	
-}
+  
 
 function StartTimer()
 { 
