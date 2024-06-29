@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+
+#showClock {
+  font-size: 50px; 
+  margin: 10px;
+  
+}
+ 
+button, i {
+	font-size: 80px;
+	height:100px;
+	width:100px;
+}
+
+</style>
+
+<title>CoffeeTimer</title>
+
+</head>
+<body onload="defaultValue()"> 
+
+<h1>Coffee Timer (4:6 Method)</h1>
+
+<button onclick="StartTimer()" >&#x23F5</button> 
+<button onclick="PauseTimer()" >&#x23F8</button>
+<p/>
+
+<div id="showClock" align="left"> 00:00 </div> 
+ 
+<p/>
+<p/>
+<table id="myTablePlan" >
+	<tr> 
+		<th> No </th>
+		<th> AccTime </th>
+		<th> AccWeight(g) </th>
+		
+		<th> &nbsp&nbsp&nbsp&nbsp</th>
+			
+		<th> AccTime(s) </th>
+		<th> secTime(s) </th>
+		<th> secWeight(g) </th>	
+		
+
+	</tr> 
+</table> 
+
+<p/>
+
+<button onclick="ResetTimer()">&#x23EE</button>
+
+<form name="myForm" action="" method="GET" onClick="loadFormValue(this.form)" >
+  <input type="button" name="button" value="GetFormula" onClick="loadFormValue(this.form)" />
+  
+  <p>Weight </p>
+  <input type="radio" id="weight1" name="weight" value="10">
+  <label for="weight1">10g</label>
+  <input type="radio" id="weight2" name="weight" value="15" checked="checked">
+  <label for="weight2">15g</label>
+  <input type="radio" id="weight3" name="weight" value="20">
+  <label for="weight3">20g</label>
+
+  <p>Ratio </p>
+  <input type="radio" id="radio1" name="ratio" value="14">
+  <label for="radio1">1:14</label>
+  <input type="radio" id="radio2" name="ratio" value="15" checked="checked">
+  <label for="radio2">1:15</label>
+  <input type="radio" id="radio3" name="ratio" value="16">
+  <label for="radio3">1:16</label>
+
+  <p>Sweet (4/10) ...ratio of sec1/sec2 </p>
+  
+  <input type="radio" id="sweet1" name="sweetness" value="1">
+  <label for="sweet1">2:3 (sweet)</label>
+  <input type="radio" id="sweet2" name="sweetness" value="2" checked="checked">
+  <label for="sweet2">1:1</label>
+  <input type="radio" id="sweet3" name="sweetness" value="3">
+  <label for="sweet3">3:2 (sour)</label> 
+
+  <p>Coffee (6/10)</p>
+  <input type="radio" id="coffee1" name="coffee" value="1">
+  <label for="coffee1">less strong(1)</label>
+  <input type="radio" id="coffee2" name="coffee" value="2" checked="checked">
+  <label for="coffee2">normal(2)</label> 
+  <input type="radio" id="coffee3" name="coffee" value="3">
+  <label for="coffee3">stronger(3)</label>
+  <br> 
+
+</form>
+
+<audio id="audio" src="sound.wav"></audio>
+ 
+
+<script>
+
+
+var totalSeconds=0;
+var my_int = setInterval(function() { setTime()}, 1000);
+clearInterval(my_int);
+ 
+function defaultValue() {
+	settingObj = {
+		"weight":"15",
+		"ratio":"15",
+		"sweetness":"2",
+		"coffee":"2"
+	}
+	GetFormula(settingObj)
+	checkStatus(totalSeconds)
+	ResetTimer()
+}
+
+function loadFormValue(form) {
+  let weight = form.weight.value;
+  let ratio = form.ratio.value;
+  let sweetness = form.sweetness.value;
+  let coffee =  form.coffee.value;
+  
+  let formData = new FormData(form);
+  let settingObj = {};
+  formData.forEach(function(value, key){
+    settingObj[key] = value;
+  });
+
+  GetFormula(settingObj)
+  ResetTimer()
+}
+
+function GetFormula(settingObj){  
+  coffeeTable = createTable(settingObj)
+  displayTable(coffeeTable)
+  
+  var json_string = JSON.stringify(settingObj);
+  console.log(json_string)
+}
+
+let coffeeTable = [
+	//ID, Time, weight, Acc Time, Acc Weight/ 
+   [1, 45, 45, 0, 0],  //1
+   [2, 45, 45, 0, 0],  //2
+   [3, 45, 45, 0, 0],  //3
+   [4, 45, 45, 0, 0],  //4
+   [5, 45, 45, 0, 0],  //5
+   [6, 0, 0, 0, 0]   //6
+];
+
+function createTable(settingObj){
+	  
+	for (const [key, value] of Object.entries(settingObj)) {
+		console.log(`${key}: ${value}`);
+	} 
+	
+	totalWeight=settingObj['weight'] *settingObj['ratio']
+	portionWeight=totalWeight/10
+	console.log('totalWeight', totalWeight,'portionWeight', portionWeight)
+	//Set weight
+	if(settingObj['sweetness']==1){
+		coffeeTable[0][2] = Math.round(portionWeight*4 *2/5); 
+	}else if (settingObj['sweetness']==2){
+		coffeeTable[0][2] = Math.round(portionWeight*4*2.5/5);
+	}else {
+		coffeeTable[0][2] = Math.round(portionWeight*4 *3/5);
+	}
+	coffeeTable[1][2] = portionWeight*4-coffeeTable[0][2]
+	if(settingObj['coffee']==1){
+		coffeeTable[2][2]   = Math.round(portionWeight*6/2); 
+		coffeeTable[3][2]   = totalWeight-coffeeTable[0][2]-coffeeTable[1][2]-coffeeTable[2][2];
+		coffeeTable[4][2]   = 0
+		coffeeTable[5][2]   = 0
+	} else if(settingObj['coffee']==2){
+		coffeeTable[2][2]   = Math.round(portionWeight*6/3); 
+		coffeeTable[3][2]   = Math.round(portionWeight*6/3); 
+		coffeeTable[4][2]   = totalWeight-coffeeTable[0][2]-coffeeTable[1][2]-coffeeTable[2][2]-coffeeTable[3][2];
+		coffeeTable[5][2]   = 0;
+	} else {
+		coffeeTable[2][2]   = Math.round(portionWeight*6/4); 
+		coffeeTable[3][2]   = Math.round(portionWeight*6/4); 
+		coffeeTable[4][2]   = Math.round(portionWeight*6/4); 
+		coffeeTable[5][2]   = totalWeight-coffeeTable[0][2]-coffeeTable[1][2]-coffeeTable[2][2]-coffeeTable[3][2]-coffeeTable[4][2];
+	}
+	
+	//Set Timer	
+	if(settingObj['coffee']==1){
+		coffeeTable[2][1]   = 45
+		coffeeTable[3][1]   = 45
+		coffeeTable[4][1]   = 0
+		coffeeTable[5][1]   = 0
+	} else if(settingObj['coffee']==2){
+		coffeeTable[2][1]   = 45
+		coffeeTable[3][1]   = 45
+		coffeeTable[4][1]   = 210-coffeeTable[0][1]-coffeeTable[1][1]-coffeeTable[2][1]-coffeeTable[3][1]
+		coffeeTable[5][1]   = 0;
+	} else {
+		coffeeTable[2][1]   = 45
+		coffeeTable[3][1]   = 45
+		coffeeTable[4][1]   = 30
+		coffeeTable[5][1]   = 30
+	} 
+ 
+	
+	//Get Acc Time
+	coffeeTable[0][3]=coffeeTable[0][1]
+	for (let i = 1; i < coffeeTable.length; i++) {
+		coffeeTable[i][3]=coffeeTable[i-1][3] +coffeeTable[i][1] 
+	}
+	
+	//Get Acc Weight
+	coffeeTable[0][4]=coffeeTable[0][2]
+	for (let i = 1; i < coffeeTable.length; i++) {
+		coffeeTable[i][4]=coffeeTable[i-1][4] +coffeeTable[i][2] 
+	}
+	
+	return coffeeTable 
+
+}
+
+function sec_2_min(totalSeconds){
+	minString= String("0" + Math.floor(totalSeconds/60)).slice(-2);  
+	secString= String("0" + totalSeconds%60).slice(-2);  
+	
+	output = minString+ ":" + secString
+	return output
+}
+
+function displayTable(coffeeTable){
+ 
+	var table = document.getElementById("myTablePlan");
+	var tableHeaderRowCount = 1;
+	var rowCount = table.rows.length;
+	if (rowCount > tableHeaderRowCount ) {
+		for (var i = tableHeaderRowCount; i < rowCount; i++) {
+			table.deleteRow(tableHeaderRowCount);
+		}
+		
+	}  
+	
+	for (let i = 0; i < coffeeTable.length; i++) {
+	
+		if (coffeeTable[i][1]!=0){
+			var row = table.insertRow(-1);
+			
+			//column0
+			var cell = row.insertCell(-1);
+			cell.innerHTML = coffeeTable[i][0];
+			
+			//column1
+			var cell = row.insertCell(-1);
+			cell.innerHTML = sec_2_min(coffeeTable[i][3]);
+			
+			//column2
+			var cell = row.insertCell(-1);
+			cell.innerHTML = coffeeTable[i][4];  	
+			
+			//column3
+			var cell = row.insertCell(-1);
+			cell.innerHTML = ""; 
+			
+			//column4
+			var cell = row.insertCell(-1);
+			cell.innerHTML = coffeeTable[i][3];  
+			
+			//column5
+			var cell = row.insertCell(-1);
+			cell.innerHTML = coffeeTable[i][1];
+			
+			//column6		
+			var cell = row.insertCell(-1);
+			cell.innerHTML = coffeeTable[i][2];
+ 
+		}			
+			
+			
+	}   
+}
+
+
+function DisplayClock(totalSeconds)
+{
+	clockBox = document.getElementById("showClock"); 
+	clockBox.innerHTML = sec_2_min(totalSeconds) ;
+	 
+}
+
+function hightlightTable(sectionId){
+	var myTable = document.getElementById('myTablePlan'); 
+	if(myTable) {
+		Array.from(myTable.rows).forEach((td, rowIdx) => {
+			Array.from(td.cells).forEach((cell, cellIdx) => {
+				cell.style.backgroundColor = 'White';  
+			});
+		});
+		  
+		var x = myTable.rows[sectionId].cells
+		for (let i =0; i< x.length ; i++){
+			x[i].style.backgroundColor = 'yellow';  
+		}
+		
+	}	
+}
+
+var prevSection=1;
+
+function checkStatus(totalSeconds){
+	sectionId=1;
+	for (let i=coffeeTable.length-1; i >= 1 ; i--){
+	
+		if (totalSeconds > coffeeTable[i-1][3]){
+			sectionId= i+1;
+			break;
+		} 
+	}
+	if (totalSeconds >= coffeeTable[5][3] ){
+		Done=1; 
+	}else{
+		Done=0;
+	}	 
+	return [sectionId, Done]
+
+}
+
+function playAudio() {
+        var audio = document.getElementById("audio");
+        audio.play();
+}
+	  
+
+function setTime() { 
+
+    totalSeconds++;
+	let [sectionId, Done] = checkStatus(totalSeconds)  
+	if (sectionId != prevSection)
+	{
+		playAudio()
+		prevSection=sectionId
+	}
+	 
+	DisplayClock(totalSeconds)
+	hightlightTable(sectionId)
+	
+	if (Done==1){
+		clearInterval(my_int);  
+		playAudio()
+		var secMsgBox = document.getElementById('showClock'); 
+		secMsgBox.innerHTML +=" DONE";
+		
+	} 
+}
+ 
+function ResetTimer()
+{
+	totalSeconds=0
+	prevSection=1
+	clearInterval(my_int); 
+	DisplayClock(totalSeconds)
+	
+}
+
+function StartTimer()
+{ 
+	playAudio() 
+	my_int = setInterval(function() {setTime()}, 1000); 
+}
+
+function PauseTimer()
+{ 
+	clearInterval(my_int); 
+}
+
+
+</script>
+
+</body>
+</html>
+
+
+
