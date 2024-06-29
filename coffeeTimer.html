@@ -14,7 +14,7 @@ table, th, td {
 }
  
 button, i {
-	font-size: 80px;
+	font-size: 20px;
 	height:100px;
 	width:100px;
 }
@@ -28,8 +28,8 @@ button, i {
 
 <h1>Coffee Timer (4:6 Method)</h1>
 
-<button onclick="StartTimer()" >&#x23F5</button> 
-<button onclick="PauseTimer()" >&#x23F8</button>
+<button onclick="StartTimer()" >PLAY</button> 
+<button onclick="PauseTimer()" >PAUSE</button>
 <p/>
 
 <div id="showClock" align="left"> 00:00 </div> 
@@ -54,49 +54,79 @@ button, i {
 
 <p/>
 
-<button onclick="ResetTimer()">&#x23EE</button>
+<button onclick="ResetTimer()">Reset</button>
+
 
 <form name="myForm" action="" method="GET" onClick="loadFormValue(this.form)" >
+
+ 
   <input type="button" name="button" value="GetFormula" onClick="loadFormValue(this.form)" />
-  
-  <p>Weight </p>
-  <input type="radio" id="weight1" name="weight" value="10">
-  <label for="weight1">10g</label>
-  <input type="radio" id="weight2" name="weight" value="15" checked="checked">
-  <label for="weight2">15g</label>
-  <input type="radio" id="weight3" name="weight" value="20">
-  <label for="weight3">20g</label>
+  <p/>
+  <p/>
+  <table>
+	<tr>
+		<td>Weight</td>
+		<td>
+		  <input type="radio" id="weight1" name="weight" value="10">
+		  <label for="weight1">10g</label>
+		  <input type="radio" id="weight2" name="weight" value="15" checked="checked">
+		  <label for="weight2">15g</label>
+		  <input type="radio" id="weight3" name="weight" value="20">
+		  <label for="weight3">20g</label>
+		</td>
+	</tr>
 
-  <p>Ratio </p>
-  <input type="radio" id="radio1" name="ratio" value="14">
-  <label for="radio1">1:14</label>
-  <input type="radio" id="radio2" name="ratio" value="15" checked="checked">
-  <label for="radio2">1:15</label>
-  <input type="radio" id="radio3" name="ratio" value="16">
-  <label for="radio3">1:16</label>
+	<tr>
+		<td>Ratio</td>
+		<td>
+		  <input type="radio" id="radio1" name="ratio" value="14">
+		  <label for="radio1">1:14</label>
+		  <input type="radio" id="radio2" name="ratio" value="15" checked="checked">
+		  <label for="radio2">1:15</label>
+		  <input type="radio" id="radio3" name="ratio" value="16">
+		  <label for="radio3">1:16</label>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>Sweetness</td>
+		<td>
+		  <input type="radio" id="sweet1" name="sweetness" value="1">
+		  <label for="sweet1">2:3 (sweet)</label>
+		  <input type="radio" id="sweet2" name="sweetness" value="2" checked="checked">
+		  <label for="sweet2">1:1</label>
+		  <input type="radio" id="sweet3" name="sweetness" value="3">
+		  <label for="sweet3">3:2 (sour)</label> 
+		</td>
+	
+	</tr>
+	
+	<tr>
+		<td>Strength</td>
+		<td>
+		  <input type="radio" id="coffee1" name="coffee" value="1">
+		  <label for="coffee1">less strong(1)</label>
+		  <input type="radio" id="coffee2" name="coffee" value="2" checked="checked">
+		  <label for="coffee2">normal(2)</label> 
+		  <input type="radio" id="coffee3" name="coffee" value="3">
+		  <label for="coffee3">stronger(3)</label>
+		</td>
+	</tr>	
+  </table> 
 
-  <p>Sweet (4/10) ...ratio of sec1/sec2 </p>
-  
-  <input type="radio" id="sweet1" name="sweetness" value="1">
-  <label for="sweet1">2:3 (sweet)</label>
-  <input type="radio" id="sweet2" name="sweetness" value="2" checked="checked">
-  <label for="sweet2">1:1</label>
-  <input type="radio" id="sweet3" name="sweetness" value="3">
-  <label for="sweet3">3:2 (sour)</label> 
-
-  <p>Coffee (6/10)</p>
-  <input type="radio" id="coffee1" name="coffee" value="1">
-  <label for="coffee1">less strong(1)</label>
-  <input type="radio" id="coffee2" name="coffee" value="2" checked="checked">
-  <label for="coffee2">normal(2)</label> 
-  <input type="radio" id="coffee3" name="coffee" value="3">
-  <label for="coffee3">stronger(3)</label>
   <br> 
 
 </form>
 
 <audio id="audio" src="sound.wav"></audio>
  
+<p>
+Remarks: <br/>
+1) Weight : Coffee Weight  <br/>
+2) Ratio  : Coffee : Total Weight <br/>
+3) Sweetness: adjust the potion of water in 1st section (less water, sweeter) <br/>
+4) Strenght : adjust no of section for later 6/10 (more, stronger coffee) <br/>
+</p>
 
 <script>
 
