@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+
+#showClock {
+  font-size: 50px; 
+  margin: 10px;
+  
+}
+ 
+button, i {
+	font-size: 20px;
+	height:100px;
+	width:100px;
+}
+
+input[type=radio] { 
+	position: relative;
+    height: 5em;
+	top:20%;
+}
+ 
+
+label {
+    position: relative;
+	bottom: 2em; /* adjust this up or down */
+}
+ 
+ 
+
+</style>
+
+<title>Coffee Timer (1 Flow)</title>
+
+</head>
+<body onload="loadFormValue()"> 
+
+<h1>Coffee Timer (1 Flow)</h1>
+ 
+Pour 1st portion water then press "PLAY"
+<p/>
+
+<button id="playBtt" onclick="StartTimer()" >PLAY</button> 
+<button id="pauseBtt" onclick="PauseTimer()" >PAUSE</button>
+<p/>
+
+<div id="showClock" align="left"> 00:00 </div> 
+ 
+<p/>
+<p/>
+<table id="myTablePlan" >
+	<tr> 
+		<th> No </th>
+		<th> Running <br> Time </th>
+		<th> Running <br> Weight(g) </th>
+		
+		<th> &nbsp&nbsp&nbsp&nbsp</th>
+			
+		<th> AccTime(s) </th>
+		<th> secTime(s) </th>
+		<th> secWeight(g) </th>	
+		
+
+	</tr> 
+</table> 
+
+<p/>
+ 
+
+<form id="myForm" action=""  onload="loadFormValue()" >
+ 
+	<input type="button" name="button" value="Update Setting" onClick="loadFormValue()" />
+	<p/>
+	<p/>
+	
+    <table>
+	<tr>
+		<td>Weight</td>
+		<td> 
+		  <input type="radio" id="weight1" name="weight" value="10">
+		  <label for="weight1">10g</label>
+		  <input type="radio" id="weight2" name="weight" value="15" checked="checked">
+		  <label for="weight2">15g</label>
+		  <input type="radio" id="weight3" name="weight" value="20">
+		  <label for="weight3">20g</label>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Ratio</td>
+		<td>
+		  <input type="radio" id="radio1" name="ratio" value="14">
+		  <label for="radio1">1:14</label>
+		  <input type="radio" id="radio2" name="ratio" value="15" checked="checked">
+		  <label for="radio2">1:15</label>
+		  <input type="radio" id="radio3" name="ratio" value="16">
+		  <label for="radio3">1:16</label>
+		</td>
+	</tr>
+	 
+
+	<tr>
+		<td>SoundOption</td>
+		<td>
+		  <input type="radio" id="sd1" name="sdId" value="1">
+		  <label for="sd1">1</label>
+		  <input type="radio" id="sd2" name="sdId" value="2" >
+		  <label for="sd2">2</label> 
+		  <input type="radio" id="sd3" name="sdId" value="3">
+		  <label for="sd3">3</label>
+		  <input type="radio" id="sd4" name="sdId" value="4" checked="checked">
+		  <label for="sd4">4</label>		  
+		</td>
+		
+		
+		<!-- <td>  -->
+		  <!-- <input type="number" id="sdId" name="sdId" min="1" max="4" value="1" >  -->
+		  <!-- <label for="sdId">(1-4)</label> -->
+		<!-- </td> -->
+	</tr>
+	
+  </table> 
+
+  <br> 
+  
+  
+  
+</form>
+
+<audio id="audio" src="sound1.wav"></audio>
+ 
+
+
+<script> 
+
+var totalSeconds=0;
+var my_int = setInterval(function() {setTime()}, 1000);
+clearInterval(my_int);
+
+function loadFormValue() {
+
+	var x = document.getElementById("myForm");
+	let ratio = x.ratio.value;
+	let weight = x.weight.value;
+	let sdId =  x.sdId.value;
+	
+	var sd =document.getElementById("audio");
+	if (sdId>4) {
+		sdId=4
+	}	
+	sd.src="sound"+sdId+".wav";
+	
+	let formData = new FormData(x);
+	let settingObj = {};
+	formData.forEach(function(value, key){
+		settingObj[key] = value;
+	});
+	
+	GetFormula(settingObj);
+	checkStatus(totalSeconds);
+	ResetTimer()
+}
+
+function GetFormula(settingObj){  
+  coffeeTable = createTable(settingObj)
+  displayTable(coffeeTable)
+  
+  var json_string = JSON.stringify(settingObj);
+  console.log(json_string)
+}
+
+let coffeeTable = [
+	//ID, Time, weight, Acc Time, Acc Weight/ 
+   [1, 0, 50, 0, 0],  //1
+   [2, 15, 0, 0, 0],  //2
+   [3, 15, 50, 0, 0],  //3   
+   [4, 30, 60, 0, 0],  //4
+   [5, 20, 40, 0, 0],  //5
+   [6, 20, 25, 0, 0],  //6 
+];
+
+function createTable(settingObj){
+	  
+	for (const [key, value] of Object.entries(settingObj)) {
+		console.log(`${key}: ${value}`);
+	} 
+	
+	totalWeight=settingObj['weight'] *settingObj['ratio']
+	portionWeight=totalWeight/10
+	console.log('totalWeight', totalWeight,'portionWeight', portionWeight)
+	//Set weight
+	if ((settingObj['weight']==15) & (settingObj['ratio']==15)){
+			//weight
+			coffeeTable[0][2] = 50
+			coffeeTable[1][2] = 0
+			coffeeTable[2][2] = 50
+			coffeeTable[3][2] = 60
+			coffeeTable[4][2] = 40
+			coffeeTable[5][2] = 25
+	}else{
+			//weight
+			coffeeTable[0][2] = Math.floor(totalWeight*50/225)
+			coffeeTable[1][2] = 0
+			coffeeTable[2][2] = Math.floor(totalWeight*50/225)
+			coffeeTable[3][2] = Math.floor(totalWeight*60/225)
+			coffeeTable[4][2] = Math.floor(totalWeight*40/225)
+			coffeeTable[5][2] = totalWeight-(coffeeTable[0][2]+coffeeTable[1][2]+coffeeTable[2][2]+coffeeTable[3][2]+coffeeTable[4][2])
+	}	
+ 
+	
+	//Get Acc Time
+	coffeeTable[0][3]=coffeeTable[0][1]
+	for (let i = 1; i < coffeeTable.length; i++) {
+		coffeeTable[i][3]=coffeeTable[i-1][3] +coffeeTable[i][1] 
+	}
+	
+	//Get Acc Weight
+	coffeeTable[0][4]=coffeeTable[0][2]
+	for (let i = 1; i < coffeeTable.length; i++) {
+		coffeeTable[i][4]=coffeeTable[i-1][4] +coffeeTable[i][2] 
+	}
+	
+	return coffeeTable 
+
+}
+
+function sec_2_min(totalSeconds){
+	minString= String("0" + Math.floor(totalSeconds/60)).slice(-2);  
+	secString= String("0" + totalSeconds%60).slice(-2);  
+	
+	output = minString+ ":" + secString
+	return output
+}
+
+function displayTable(coffeeTable){
+ 
+	var table = document.getElementById("myTablePlan");
+	var tableHeaderRowCount = 1;
+	var rowCount = table.rows.length;
+	if (rowCount > tableHeaderRowCount ) {
+		for (var i = tableHeaderRowCount; i < rowCount; i++) {
+			table.deleteRow(tableHeaderRowCount);
+		}
+		
+	}  
+	
+	for (let i = 0; i < coffeeTable.length; i++) {
+	
+		
+		var row = table.insertRow(-1);
+		
+		//column0
+		var cell = row.insertCell(-1);
+		cell.innerHTML = coffeeTable[i][0];
+		
+		//column1
+		var cell = row.insertCell(-1);
+		cell.innerHTML = sec_2_min(coffeeTable[i][3]);
+		
+		//column2
+		var cell = row.insertCell(-1);
+		cell.innerHTML = coffeeTable[i][4];  	
+		
+		//column3
+		var cell = row.insertCell(-1);
+		cell.innerHTML = ""; 
+		
+		//column4
+		var cell = row.insertCell(-1);
+		cell.innerHTML = coffeeTable[i][3];  
+		
+		//column5
+		var cell = row.insertCell(-1);
+		cell.innerHTML = coffeeTable[i][1];
+		
+		//column6		
+		var cell = row.insertCell(-1);
+		cell.innerHTML = coffeeTable[i][2];
+
+				
+			
+			
+	}   
+}
+
+
+function DisplayClock(totalSeconds)
+{
+	clockBox = document.getElementById("showClock"); 
+	clockBox.innerHTML = sec_2_min(totalSeconds) ;
+	 
+}
+
+function hightlightTable(sectionId){
+	var myTable = document.getElementById('myTablePlan'); 
+	if(myTable) {
+		Array.from(myTable.rows).forEach((td, rowIdx) => {
+			Array.from(td.cells).forEach((cell, cellIdx) => {
+				cell.style.backgroundColor = 'White';  
+			});
+		});
+		  
+		var x = myTable.rows[sectionId].cells
+		for (let i =0; i< x.length ; i++){
+			x[i].style.backgroundColor = 'yellow';  
+		}
+		
+	}	
+}
+
+var prevSection=1;
+
+function checkStatus(totalSeconds){
+	sectionId=1;
+	for (let i=coffeeTable.length-1; i >= 1 ; i--){
+	
+		if (totalSeconds > coffeeTable[i-1][3]){
+			sectionId= i+1;
+			break;
+		} 
+	}
+	if (totalSeconds >= coffeeTable[coffeeTable.length-1][3] ){
+		Done=1; 
+	}else{
+		Done=0;
+	}	 
+	return [sectionId, Done]
+
+}
+
+function playAudio() {
+        var audio = document.getElementById("audio");
+        audio.play();
+}
+	  
+
+function setTime() { 
+
+    totalSeconds++;
+	let [sectionId, Done] = checkStatus(totalSeconds)  
+	if (sectionId != prevSection)
+	{
+		playAudio()
+		prevSection=sectionId
+	}
+	 
+	DisplayClock(totalSeconds)
+	hightlightTable(sectionId)
+	
+	if (Done==1){
+		clearInterval(my_int);  
+		playAudio()
+		var secMsgBox = document.getElementById('showClock'); 
+		secMsgBox.innerHTML +=" DONE";
+		
+	} 
+}
+  
+function ResetTimer(){
+	totalSeconds=0
+	prevSection=1
+	clearInterval(my_int); 
+	DisplayClock(totalSeconds)
+	document.getElementById("playBtt").disabled = false;
+	document.getElementById("pauseBtt").disabled = true;	
+}
+
+function StartTimer()
+{ 
+	playAudio() 
+	my_int = setInterval(function() {setTime()}, 1000);
+	document.getElementById("playBtt").disabled = true;
+	document.getElementById("pauseBtt").disabled = false;
+}
+
+function PauseTimer()
+{ 
+	clearInterval(my_int);
+	document.getElementById("playBtt").disabled = false;
+	document.getElementById("pauseBtt").disabled = true;	
+}
+
+//version:1.0
+
+</script>
+
+</body>
+</html>
+
+
+
