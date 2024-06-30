@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <style>
 table, th, td {
-  border: 1px solid black;
+  border: 1px solid black; 
+  border-collapse: collapse;
 }
 
 #showClock {
@@ -53,17 +54,17 @@ Pour 1st portion water then press "PLAY"
  
 <p/>
 <p/>
-<table id="myTablePlan" >
+<table id="myTablePlan" style="width:250px">
 	<tr> 
 		<th> No </th>
 		<th> Running <br> Time </th>
 		<th> Running <br> Weight(g) </th>
 		
-		<th> &nbsp&nbsp&nbsp&nbsp</th>
+		<!-- <th> &nbsp&nbsp&nbsp&nbsp</th> -->
 			
-		<th> AccTime(s) </th>
-		<th> secTime(s) </th>
-		<th> secWeight(g) </th>	
+		<!-- <th> AccTime(s) </th> -->
+		<!-- <th> secTime(s) </th> -->
+		<!-- <th> secWeight(g) </th>	 -->
 		
 
 	</tr> 
@@ -266,21 +267,21 @@ function displayTable(coffeeTable){
 		var cell = row.insertCell(-1);
 		cell.innerHTML = coffeeTable[i][4];  	
 		
-		//column3
-		var cell = row.insertCell(-1);
-		cell.innerHTML = ""; 
+		<!-- //column3 -->
+		<!-- var cell = row.insertCell(-1); -->
+		<!-- cell.innerHTML = "";  -->
 		
-		//column4
-		var cell = row.insertCell(-1);
-		cell.innerHTML = coffeeTable[i][3];  
+		<!-- //column4 -->
+		<!-- var cell = row.insertCell(-1); -->
+		<!-- cell.innerHTML = coffeeTable[i][3];   -->
 		
-		//column5
-		var cell = row.insertCell(-1);
-		cell.innerHTML = coffeeTable[i][1];
+		<!-- //column5 -->
+		<!-- var cell = row.insertCell(-1); -->
+		<!-- cell.innerHTML = coffeeTable[i][1]; -->
 		
-		//column6		
-		var cell = row.insertCell(-1);
-		cell.innerHTML = coffeeTable[i][2];
+		<!-- //column6		 -->
+		<!-- var cell = row.insertCell(-1); -->
+		<!-- cell.innerHTML = coffeeTable[i][2]; -->
 
 				
 			

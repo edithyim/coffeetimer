@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <style>
 table, th, td {
-  border: 1px solid black;
+  border: 1px solid black; 
+  border-collapse: collapse;
 }
 
 #showClock {
@@ -35,13 +36,13 @@ label {
 
 </style>
 
-<title>CoffeeTimer</title>
+<title>CoffeeTimer (4:6 Method)</title>
 
 </head>
 <body onload="loadFormValue()"> 
 
 <h1>Coffee Timer (4:6 Method)</h1>
-
+Start the timer when pouring 1st potion of water<br>
 <button id="playBtt" onclick="StartTimer()" >PLAY</button> 
 <button id="pauseBtt" onclick="PauseTimer()" >PAUSE</button>
 <p/>
@@ -50,17 +51,17 @@ label {
  
 <p/>
 <p/>
-<table id="myTablePlan" >
+<table id="myTablePlan" style="width:250px">
 	<tr> 
 		<th> No </th>
-		<th> AccTime </th>
-		<th> AccWeight(g) </th>
+		<th> Running <br> Time </th>
+		<th> Running <br> Weight(g) </th>
 		
-		<th> &nbsp&nbsp&nbsp&nbsp</th>
+		<!-- <th> &nbsp&nbsp&nbsp&nbsp</th> -->
 			
-		<th> AccTime(s) </th>
-		<th> secTime(s) </th>
-		<th> secWeight(g) </th>	
+		<!-- <th> AccTime(s) </th> -->
+		<!-- <th> secTime(s) </th> -->
+		<!-- <th> secWeight(g) </th>	 -->
 		
 
 	</tr> 
@@ -77,7 +78,7 @@ label {
 	
     <table>
 	<tr>
-		<td>Weight</td>
+		<td>Coffee Weight</td>
 		<td> 
 		  <input type="radio" id="weight1" name="weight" value="10">
 		  <label for="weight1">10g</label>
@@ -89,7 +90,7 @@ label {
 	</tr>
 
 	<tr>
-		<td>Ratio</td>
+		<td>Ratio<br>(coffee : water)</td>
 		<td>
 		  <input type="radio" id="radio1" name="ratio" value="14">
 		  <label for="radio1">1:14</label>
@@ -156,11 +157,9 @@ label {
 <audio id="audio" src="sound1.wav"></audio>
  
 <p/>
-Remarks: <br/>
-1) Weight : Coffee Weight  <br/>
-2) Ratio  : Coffee : Total Weight <br/>
-3) Sweetness: adjust the potion of water in 1st section (less water, sweeter) <br/>
-4) Strength : adjust no of section for later 6/10 (more, stronger coffee) <br/> 
+Remarks: <br/>  
+1) Sweetness: adjust the potion of water in 1st section (less water, sweeter) <br/>
+2) Strength : adjust no of section for later 6/10 (more, stronger coffee) <br/> 
 
 
 
@@ -321,21 +320,21 @@ function displayTable(coffeeTable){
 			var cell = row.insertCell(-1);
 			cell.innerHTML = coffeeTable[i][4];  	
 			
-			//column3
-			var cell = row.insertCell(-1);
-			cell.innerHTML = ""; 
+			<!-- //column3 -->
+			<!-- var cell = row.insertCell(-1); -->
+			<!-- cell.innerHTML = "";  -->
 			
-			//column4
-			var cell = row.insertCell(-1);
-			cell.innerHTML = coffeeTable[i][3];  
+			<!-- //column4 -->
+			<!-- var cell = row.insertCell(-1); -->
+			<!-- cell.innerHTML = coffeeTable[i][3];   -->
 			
-			//column5
-			var cell = row.insertCell(-1);
-			cell.innerHTML = coffeeTable[i][1];
+			<!-- //column5 -->
+			<!-- var cell = row.insertCell(-1); -->
+			<!-- cell.innerHTML = coffeeTable[i][1]; -->
 			
-			//column6		
-			var cell = row.insertCell(-1);
-			cell.innerHTML = coffeeTable[i][2];
+			<!-- //column6		 -->
+			<!-- var cell = row.insertCell(-1); -->
+			<!-- cell.innerHTML = coffeeTable[i][2]; -->
  
 		}			
 			
