@@ -19,6 +19,20 @@ button, i {
 	width:100px;
 }
 
+input[type=radio] { 
+	position: relative;
+    height: 5em;
+	top:20%;
+}
+ 
+
+label {
+    position: relative;
+	bottom: 2em; /* adjust this up or down */
+}
+ 
+ 
+
 </style>
 
 <title>CoffeeTimer</title>
@@ -64,9 +78,9 @@ button, i {
     <table>
 	<tr>
 		<td>Weight</td>
-		<td>
+		<td> 
 		  <input type="radio" id="weight1" name="weight" value="10">
-		  <label for="weight1">10g</label>
+		  <label for="weight1">15g</label>
 		  <input type="radio" id="weight2" name="weight" value="15" checked="checked">
 		  <label for="weight2">15g</label>
 		  <input type="radio" id="weight3" name="weight" value="20">
@@ -114,10 +128,21 @@ button, i {
 	<tr>
 		<td>SoundOption</td>
 		<td>
-		  
-		  <input type="number" id="sdId" name="sdId" min="1" max="4" value="1" > 
-		  <label for="sdId">(1-4)</label>
+		  <input type="radio" id="sd1" name="sdId" value="1">
+		  <label for="sd1">1</label>
+		  <input type="radio" id="sd2" name="sdId" value="2" >
+		  <label for="sd2">2</label> 
+		  <input type="radio" id="sd3" name="sdId" value="3">
+		  <label for="sd3">3</label>
+		  <input type="radio" id="sd4" name="sdId" value="4" checked="checked">
+		  <label for="sd4">4</label>		  
 		</td>
+		
+		
+		<!-- <td>  -->
+		  <!-- <input type="number" id="sdId" name="sdId" min="1" max="4" value="1" >  -->
+		  <!-- <label for="sdId">(1-4)</label> -->
+		<!-- </td> -->
 	</tr>
 	
   </table> 
