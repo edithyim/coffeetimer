@@ -104,7 +104,18 @@ Pour 1st portion water then press "PLAY"
 		</td>
 	</tr>
 	 
-
+	<tr>
+	
+		<td>Nearest</td>
+		<td>
+		  <input type="radio" id="near1" name="near" value="1">
+		  <label for="near1">1g</label>
+		  <input type="radio" id="near2" name="near" value="5" checked="checked">
+		  <label for="near2">5g</label> 
+		  <input type="radio" id="near3" name="near" value="10">
+		  <label for="near3">10g</label> 	  
+		</td>
+	</tr>
 	<tr>
 		<td>SoundOption</td>
 		<td>
@@ -185,6 +196,16 @@ let coffeeTable = [
    [6, 20, 25, 0, 0],  //6 
 ];
 
+function get_nearest(in_no, mode){
+	
+	if ((in_no%mode)> (mode/2)) {
+	
+		out_no= (Math.floor( (in_no/mode) ) *mode) + Number(mode)
+	}else{
+		out_no= Math.floor( (in_no/mode) ) * mode
+	} 
+	return out_no
+}
 function createTable(settingObj){
 	  
 	for (const [key, value] of Object.entries(settingObj)) {
@@ -193,6 +214,7 @@ function createTable(settingObj){
 	
 	totalWeight=settingObj['weight'] *settingObj['ratio']
 	portionWeight=totalWeight/10
+	mode=settingObj['near'] 
 	console.log('totalWeight', totalWeight,'portionWeight', portionWeight)
 	//Set weight
 	if ((settingObj['weight']==15) & (settingObj['ratio']==15)){
@@ -205,11 +227,11 @@ function createTable(settingObj){
 			coffeeTable[5][2] = 25
 	}else{
 			//weight
-			coffeeTable[0][2] = Math.floor(totalWeight*50/225)
+			coffeeTable[0][2] = get_nearest (Math.floor(totalWeight*50/225), mode)
 			coffeeTable[1][2] = 0
-			coffeeTable[2][2] = Math.floor(totalWeight*50/225)
-			coffeeTable[3][2] = Math.floor(totalWeight*60/225)
-			coffeeTable[4][2] = Math.floor(totalWeight*40/225)
+			coffeeTable[2][2] = get_nearest (Math.floor(totalWeight*50/225), mode)
+			coffeeTable[3][2] = get_nearest (Math.floor(totalWeight*60/225), mode)
+			coffeeTable[4][2] = get_nearest (Math.floor(totalWeight*40/225), mode)
 			coffeeTable[5][2] = totalWeight-(coffeeTable[0][2]+coffeeTable[1][2]+coffeeTable[2][2]+coffeeTable[3][2]+coffeeTable[4][2])
 	}	
  
@@ -338,7 +360,11 @@ function playAudio() {
         var audio = document.getElementById("audio");
         audio.play();
 }
-	  
+function stopAudio() {
+        var audio = document.getElementById("audio");
+        audio.pause();
+		audio.currentTime = 0;
+}	
 
 function setTime() { 
 
@@ -382,6 +408,7 @@ function StartTimer()
 function PauseTimer()
 { 
 	clearInterval(my_int);
+	stopAudio();
 	document.getElementById("playBtt").disabled = false;
 	document.getElementById("pauseBtt").disabled = true;	
 }
