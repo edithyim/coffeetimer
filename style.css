@@ -16,13 +16,19 @@ body {
 .setting_head {
     background:#7fb5da;
 }
+
+
 td {
 	font-size: 5vw; 
 }
 
+table {
+	width:100%
+}
+ 
  
 table, th, td {
-  border: 0.2vw solid black; 
+  border: 0.5vw solid black; 
   border-collapse: collapse;
    
 }
