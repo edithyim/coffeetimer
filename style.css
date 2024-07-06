@@ -37,8 +37,11 @@ table, th, td {
   font-size: 20vw; 
   margin: 0.1vw; 
 }
+
  
 button, i {
+	margin:2px 40px 2px 40px;
+	padding: 0.1;
 	font-size: 5vw;
 	height:25vw;
 	width:25vw;
