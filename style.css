@@ -1,29 +1,54 @@
+html { font-size:100%; }
+
+@media (min-width:640px) { body {font-size:1rem;} }
+@media (min-width:960px) { body {font-size:1.2rem;} }
+@media (min-width:1100px) { body {font-size:1.5rem;} }
+@media (min-width:2000px) { body {font-size:3rem;} }
+
+.parent .child {
+  font-size: 1em;
+}
+
+.setting_head {
+    background:#7fb5da;
+}
+td {
+	font-size: 1.2em; 	
+}
 table, th, td {
-  border: 1px solid black; 
+  border: 0.1em solid black; 
   border-collapse: collapse;
 }
 
 #showClock {
-  font-size: 50px; 
-  margin: 10px;
-  
+  font-size: 4em; 
+  margin: 0.1em; 
 }
  
 button, i {
-	font-size: 20px;
-	height:100px;
-	width:100px;
+	font-size: 1.5em;
+	height:4em;
+	width:4em;
 }
 
+input[type=button]{ 
+	font-size: 2em; 
+	height:2em;
+}	
+
 input[type=radio] { 
-	position: relative;
-    height: 5em;
-	top:20%;
+	position: relative; 
+	top:0.1em;
 }
- 
+input[type=number] { 
+	
+	font-size: 2em; 
+}
+
 
 label {
     position: relative;
-	bottom: 2em; /* adjust this up or down */
+	font-size: 1em;
+	top: 0.1em; /* adjust this up or down */
 }
  

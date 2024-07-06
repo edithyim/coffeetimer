@@ -47,8 +47,11 @@ Start the timer when pouring 1st potion of water<br>
 	<p/>
 	
     <table>
+	
 	<tr>
-		<td>Coffee Weight</td>
+		<td class="setting_head" >Coffee Weight</td>
+	</tr>
+	<tr> 
 		<td> 
 		  <input type="radio" id="weight1" name="weight" value="10" onClick="updateWeight()">
 		  <label for="weight1">10g</label>
@@ -57,14 +60,17 @@ Start the timer when pouring 1st potion of water<br>
 		  <input type="radio" id="weight3" name="weight" value="20" onClick="updateWeight()">
 		  <label for="weight3">20g</label>
 		  <br>
-		  <label for="weightFinal" >FineTune</label>			 
-		  <input type="number" value="15" min="8" max="30" style="font-size: 30px;" id="weightFinal" name="weight">
+		  <label for="weightFinal" >user-input</label>			 
+		  <input type="number" value="15" min="8" max="30" id="weightFinal" name="weight">
 		   
 		</td>
 	</tr>
 
 	<tr>
-		<td>Ratio<br>(coffee : water)</td>
+	<td class="setting_head" >Ratio (coffee : water)</td>
+	</tr>
+	<tr>
+		
 		<td>
 		  <input type="radio" id="radio1" name="ratio" value="14">
 		  <label for="radio1">1:14</label>
@@ -74,9 +80,9 @@ Start the timer when pouring 1st potion of water<br>
 		  <label for="radio3">1:16</label>
 		</td>
 	</tr>
-	
+	<tr><td class="setting_head" >Sweetness</td></tr>
 	<tr>
-		<td>Sweetness</td>
+		
 		<td>
 		  <input type="radio" id="sweet1" name="sweetness" value="1">
 		  <label for="sweet1">2:3 (sweet)</label>
@@ -87,9 +93,10 @@ Start the timer when pouring 1st potion of water<br>
 		</td>
 	
 	</tr>
+	<tr><td class="setting_head" >Strength</td></tr>
 	
 	<tr>
-		<td>Strength</td>
+		
 		<td>
 		  <input type="radio" id="coffee1" name="coffee" value="1">
 		  <label for="coffee1">less strong(1)</label>
@@ -99,9 +106,9 @@ Start the timer when pouring 1st potion of water<br>
 		  <label for="coffee3">stronger(3)</label>
 		</td>
 	</tr>
-	<tr>
 	
-		<td>Nearest</td>
+	<tr><td class="setting_head" >Nearest</td></tr>	
+	<tr> 
 		<td>
 		  <input type="radio" id="near1" name="near" value="1">
 		  <label for="near1">1g</label>
@@ -111,9 +118,11 @@ Start the timer when pouring 1st potion of water<br>
 		  <label for="near3">10g</label> 	  
 		</td>
 	</tr>	
-
+	
+	<tr><td class="setting_head" >SoundOption</td></tr>
+	
 	<tr>
-		<td>SoundOption</td>
+		
 		<td>
 		  <input type="radio" id="sd1" name="sdId" value="1">
 		  <label for="sd1">1</label>
