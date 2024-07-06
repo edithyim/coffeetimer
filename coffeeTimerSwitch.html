@@ -2,39 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<style>
-table, th, td {
-  border: 1px solid black; 
-  border-collapse: collapse;
-}
-
-#showClock {
-  font-size: 50px; 
-  margin: 10px;
-  
-}
- 
-button, i {
-	font-size: 20px;
-	height:100px;
-	width:100px;
-}
-
-input[type=radio] { 
-	position: relative;
-    height: 5em;
-	top:20%;
-}
- 
-
-label {
-    position: relative;
-	bottom: 2em; /* adjust this up or down */
-}
- 
- 
-
-</style>
+<script src="common.js"></script>
+<link rel="stylesheet" href="style.css">
 
 <title>CoffeeTimer(Switch)</title>
 
@@ -80,14 +49,19 @@ Start the timer when pouring 1st potion of water<br>
 	
     <table>
 	<tr>
+ 
 		<td>Coffee Weight</td>
 		<td> 
-		  <input type="radio" id="weight1" name="weight" value="10">
+		  <input type="radio" id="weight1" name="weight" value="10" onClick="updateWeight()">
 		  <label for="weight1">10g</label>
-		  <input type="radio" id="weight2" name="weight" value="15" >
+		  <input type="radio" id="weight2" name="weight" value="15" checked="checked" onClick="updateWeight()">
 		  <label for="weight2">15g</label>
-		  <input type="radio" id="weight3" name="weight" value="20" checked="checked">
+		  <input type="radio" id="weight3" name="weight" value="20" onClick="updateWeight()">
 		  <label for="weight3">20g</label>
+		  <br>
+		  <label for="weightFinal" >FineTune</label>			 
+		  <input type="number" value="15" min="8" max="30" style="font-size: 30px;" id="weightFinal" name="weight">
+		   
 		</td>
 	</tr>
 
@@ -163,7 +137,7 @@ Remarks: <br/>
 <script> 
 
 var totalSeconds=0;
-var my_int = setInterval(function() {setTime()}, 1000);
+var my_int = setInterval(function() {setTime()}, 500);
 clearInterval(my_int);
 
 function loadFormValue() {
@@ -186,8 +160,6 @@ function loadFormValue() {
 		settingObj[key] = value;
 	});
 	
-	 
-	
 	coffeeTable = createTable(settingObj)
 	displayTable(coffeeTable)
 
@@ -195,6 +167,7 @@ function loadFormValue() {
 	console.log(json_string)
 	checkStatus(totalSeconds);
 	ResetTimer()
+	
 }
  
 let coffeeTable = [
@@ -204,19 +177,7 @@ let coffeeTable = [
    [3, 30, 160, 0, 0, "Close/OffCup","70", 	160],  //3
    [4, 75, 0, 0, 0, "Open/OnCup", 	"70", 	0],    //4 
 ];
-
-function get_nearest(in_no, mode){
-	
-	if ((in_no%mode)> (mode/2)) {
-	
-		out_no= (Math.floor( (in_no/mode) ) *mode) + Number(mode)
-	}else{
-		out_no= Math.floor( (in_no/mode) ) * mode
-	} 
-	return out_no
-}
-
-
+  
 function createTable(settingObj){
 	  
 	for (const [key, value] of Object.entries(settingObj)) {
@@ -264,15 +225,7 @@ function createTable(settingObj){
 	return coffeeTable 
 
 }
-
-function sec_2_min(totalSeconds){
-	minString= String("0" + Math.floor(totalSeconds/60)).slice(-2);  
-	secString= String("0" + totalSeconds%60).slice(-2);  
-	
-	output = minString+ ":" + secString
-	return output
-}
-
+ 
 function displayTable(coffeeTable){
  
 	var table = document.getElementById("myTablePlan");
@@ -323,109 +276,10 @@ function displayTable(coffeeTable){
 			
 	}   
 }
-
-
-function DisplayClock(totalSeconds)
-{
-	clockBox = document.getElementById("showClock"); 
-	clockBox.innerHTML = sec_2_min(totalSeconds) ;
-	 
-}
-
-function hightlightTable(sectionId){
-	var myTable = document.getElementById('myTablePlan'); 
-	if(myTable) {
-		Array.from(myTable.rows).forEach((td, rowIdx) => {
-			Array.from(td.cells).forEach((cell, cellIdx) => {
-				cell.style.backgroundColor = 'White';  
-			});
-		});
-		  
-		var x = myTable.rows[sectionId].cells
-		for (let i =0; i< x.length ; i++){
-			x[i].style.backgroundColor = 'yellow';  
-		}
-		
-	}	
-}
+  
 
 var prevSection=1;
-
-function checkStatus(totalSeconds){
-	sectionId=1;
-	for (let i=coffeeTable.length-1; i >= 1 ; i--){
-	
-		if (totalSeconds > coffeeTable[i-1][3]){
-			sectionId= i+1;
-			break;
-		} 
-	}
-	if (totalSeconds >= coffeeTable[coffeeTable.length-1][3] ){
-		Done=1; 
-	}else{
-		Done=0;
-	}	 
-	return [sectionId, Done]
-
-}
-
-function playAudio() {
-        var audio = document.getElementById("audio");
-        audio.play();
-}
-function stopAudio() {
-        var audio = document.getElementById("audio");
-        audio.pause();
-		audio.currentTime = 0;
-}		  
-
-function setTime() { 
-
-    totalSeconds++;
-	let [sectionId, Done] = checkStatus(totalSeconds)  
-	if (sectionId != prevSection)
-	{
-		playAudio()
-		prevSection=sectionId
-	}
-	 
-	DisplayClock(totalSeconds)
-	hightlightTable(sectionId)
-	
-	if (Done==1){
-		clearInterval(my_int);  
-		playAudio()
-		var secMsgBox = document.getElementById('showClock'); 
-		secMsgBox.innerHTML +=" DONE";
-		
-	} 
-}
-  
-function ResetTimer(){
-	totalSeconds=0
-	prevSection=1
-	clearInterval(my_int); 
-	DisplayClock(totalSeconds)
-	document.getElementById("playBtt").disabled = false;
-	document.getElementById("pauseBtt").disabled = true;	
-}
-
-function StartTimer()
-{ 
-	playAudio() 
-	my_int = setInterval(function() {setTime()}, 1000);
-	document.getElementById("playBtt").disabled = true;
-	document.getElementById("pauseBtt").disabled = false;
-}
-
-function PauseTimer()
-{ 
-	clearInterval(my_int);
-	stopAudio();
-	document.getElementById("playBtt").disabled = false;
-	document.getElementById("pauseBtt").disabled = true;	
-}
-
+   
 //version:1.0
 
 </script>

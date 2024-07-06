@@ -1,0 +1,29 @@
+table, th, td {
+  border: 1px solid black; 
+  border-collapse: collapse;
+}
+
+#showClock {
+  font-size: 50px; 
+  margin: 10px;
+  
+}
+ 
+button, i {
+	font-size: 20px;
+	height:100px;
+	width:100px;
+}
+
+input[type=radio] { 
+	position: relative;
+    height: 5em;
+	top:20%;
+}
+ 
+
+label {
+    position: relative;
+	bottom: 2em; /* adjust this up or down */
+}
+ 
