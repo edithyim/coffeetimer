@@ -1,8 +1,8 @@
 html { font-size:100%; }
 
 @media (min-width:640px) { body {font-size:1rem;} }
-@media (min-width:960px) { body {font-size:1.2rem;} }
-@media (min-width:1100px) { body {font-size:1.5rem;} }
+@media (min-width:960px) { body {font-size:1.5rem;} }
+@media (min-width:1100px) { body {font-size:2.0rem;} }
 @media (min-width:2000px) { body {font-size:3rem;} }
 
 .parent .child {
@@ -26,7 +26,7 @@ table, th, td {
 }
  
 button, i {
-	font-size: 1.5em;
+	font-size: 1.3em;
 	height:4em;
 	width:4em;
 }
@@ -50,5 +50,10 @@ label {
     position: relative;
 	font-size: 1em;
 	top: 0.1em; /* adjust this up or down */
+}
+
+p {
+	width: 400px;
+	word-wrap: break-word;
 }
  
