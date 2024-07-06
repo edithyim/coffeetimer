@@ -53,7 +53,7 @@ function checkStatus(totalSeconds){
 	sectionId=1;
 	for (let i=coffeeTable.length-1; i >= 1 ; i--){
 	
-		if (totalSeconds > coffeeTable[i-1][3]){
+		if (totalSeconds >= coffeeTable[i-1][3]){
 			sectionId= i+1;
 			break;
 		} 
